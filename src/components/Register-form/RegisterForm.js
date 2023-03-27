@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { login } from '../../services/authService';
+import { login, register } from '../../services/authService';
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
@@ -9,7 +11,7 @@ export const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        await login(email, password);
+        await register(firstName, lastName, email, password);
     } catch(error) {
         setDisplayErrorMessage(true);
     }
@@ -17,9 +19,31 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="login-form">
-      <h2>Login</h2>
+    <div className="register-form">
+      <h2>Register</h2>
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="firstName">first name:</label>
+          <input
+            type="firstName"
+            id="firstName"
+            name="firstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="lastName">last name:</label>
+          <input
+            type="lastName"
+            id="lastName"
+            name="lastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
@@ -42,7 +66,7 @@ export const LoginForm = () => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
         {displayErrorMessage && <h3>Something went wrong</h3>}
       </form>
     </div>
