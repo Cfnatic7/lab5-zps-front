@@ -14,14 +14,7 @@ export const ResourceDisplayer = (props) => {
   }
 
   async function displayPublicResource() {
-    const token = localStorage.token;
-    const decodedToken = jwt_decode(token);
-    const currentDate = new Date();
-    const expDate = new Date(decodedToken.exp * 1000);
-    if (expDate < currentDate) {
-        logOut();
-    }
-    else setPublicResource(await getPublicResource());
+    setPublicResource(await getPublicResource());
   }
 
   async function displayUserResource() {
