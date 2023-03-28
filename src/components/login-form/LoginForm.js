@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { login } from '../../services/authService';
 
-export const LoginForm = () => {
+export const LoginForm = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
@@ -10,6 +10,7 @@ export const LoginForm = () => {
     e.preventDefault();
     try {
         await login(email, password);
+        props.setDisplayResources(true);
     } catch(error) {
         setDisplayErrorMessage(true);
     }

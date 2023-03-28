@@ -6,7 +6,8 @@ export const login = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/auth/authenticate`, { email, password });
     if (response.data.token) {
-      localStorage.setItem('user', JSON.stringify(response.data));
+      console.log(response.data.token)
+      localStorage.setItem('token', response.data.token);
     }
     console.log(response.status);
     return response.data;
@@ -16,11 +17,15 @@ export const login = async (email, password) => {
   }
 };
 
+export const logout = () => {
+  localStorage.setItem('token', undefined);
+}
+
 export const register = async (firstName, lastName, email, password) => {
     try {
       const response = await axios.post(`${API_URL}/auth/register`, {firstName, lastName, email, password });
       if (response.data.token) {
-        localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem('token', response.data.token);
       }
       console.log(response.status);
       return response.data;

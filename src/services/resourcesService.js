@@ -1,11 +1,11 @@
 import axios from 'axios';
+import { logout } from './authService';
 
-const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://127.0.0.1:8080/api';
 
-export const getPublicResource = async (email, password) => {
+export const getPublicResource = async () => {
   try {
     const response = await axios.get(`${API_URL}/resource/public`);
-    console.log(response.status);
     return response.data;
   } catch (error) {
     console.error('error:', error);
@@ -13,13 +13,37 @@ export const getPublicResource = async (email, password) => {
   }
 };
 
-export const register = async (firstName, lastName, email, password) => {
+export const getUserResource = async () => {
     try {
-      const response = await axios.post(`${API_URL}/auth/register`, {firstName, lastName, email, password });
-      if (response.data.token) {
-        localStorage.setItem('user', JSON.stringify(response.data));
+      const response = await axios.get(`${API_URL}/resource/user`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.status === 403) {
+        logout();
+        return;
       }
-      console.log(response.status);
+      return response.data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
+  };
+
+  export const getAdminResource = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/resource/admin`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.status === 403) {
+        logout();
+        return;
+      }
       return response.data;
     } catch (error) {
       console.error('Login error:', error);
